@@ -301,8 +301,8 @@ with tf.device('/gpu:0'):
                 val_loss += sess.run(cost, feed_dict=feed_dict_val)
             val_acc = val_acc / val_batches
             val_loss = val_loss / val_batches
-            msg = "Pre-training (Epoch {0}) --- Training Accuracy: N/A, Validation Accuracy: {2:>6.2%},  Validation Loss: {3:.3f}"
-            print(msg.format(0, val_acc, val_loss))  # , val_loss))
+            msg = "Pre-training (Epoch {0}) --- Training Accuracy: {1:>6.2%}, Validation Accuracy: {2:>6.2%},  Validation Loss: {3:.3f}"
+            print(msg.format(0, 0, val_acc, val_loss))  # , val_loss))
             sys.stdout.flush()
             for i in range(1, n_epochs + 1):
                 train_data.randomize(sess)
