@@ -256,6 +256,7 @@ else:
 img_size = 128
 num_channels = 1  # greyscale (I think)
 n_batches = trainingFaces.shape[0] // batch_size
+val_batches = 1000 // batch_size
 
 with tf.device('/gpu:0'):
     # set up basic (change to GoogLeNet?) model
@@ -291,12 +292,17 @@ with tf.device('/gpu:0'):
             # Run the initializer
             sess.run(tf.global_variables_initializer())
             # print("Initialised")
-            x_valid_batch, y_valid_batch = valid_data.next_batch(500)
-            feed_dict_val = {X: x_valid_batch, y_true: y_valid_batch}
-            val_acc = sess.run(accuracy, feed_dict=feed_dict_val)
-            val_loss = sess.run(cost, feed_dict=feed_dict_val)
-            msg = "Pre-training (Epoch {0}) --- Training Accuracy: {1:>6.2%}, Validation Accuracy: {2:>6.2%},  Validation Loss: {3:.3f}"
-            print(msg.format(0, 0, val_acc, val_loss))  # , val_loss))
+            val_acc = 0
+            val_loss = 0
+            for val in range(val_batches):
+                x_valid_batch, y_valid_batch = valid_data.next_batch(batch_size)
+                feed_dict_val = {X: x_valid_batch, y_true: y_valid_batch}
+                val_acc += sess.run(accuracy, feed_dict=feed_dict_val)
+                val_loss += sess.run(cost, feed_dict=feed_dict_val)
+            val_acc = val_acc / val_batches
+            val_loss = val_loss / val_batches
+            msg = "Pre-training (Epoch {0}) --- Training Accuracy: N/A, Validation Accuracy: {2:>6.2%},  Validation Loss: {3:.3f}"
+            print(msg.format(0, val_acc, val_loss))  # , val_loss))
             sys.stdout.flush()
             for i in range(1, n_epochs + 1):
                 train_data.randomize(sess)
@@ -304,6 +310,8 @@ with tf.device('/gpu:0'):
                 valid_data.randomize(sess)
                 valid_data.batch_index = 0
                 acc = 0
+                val_acc = 0
+                val_loss = 0
                 for batch in range(n_batches):
                     # if batch % 10 == 0:
                     #    print('Batch', batch, 'of', n_batches, 'done')
@@ -311,18 +319,19 @@ with tf.device('/gpu:0'):
                     feed_dict_train = {X: x_batch, y_true: y_true_batch}
                     sess.run(optimizer, feed_dict=feed_dict_train)
                     acc += sess.run(accuracy, feed_dict=feed_dict_train)
-                acc = acc / n_batches
                 if i % display_step == 0:
                     valid_data.batch_index = 0
-                    x_valid_batch, y_valid_batch = valid_data.next_batch(500)
-                    feed_dict_val = {X: x_valid_batch, y_true: y_valid_batch}
-                    # val_loss = sess.run(cost, feed_dict=feed_dict_val)
-                    val_acc = sess.run(accuracy, feed_dict=feed_dict_val)
-                    val_loss = sess.run(cost, feed_dict=feed_dict_val)
-                    # epoch = int(i / int(data.train.num_examples/batch_size))
-                    msg = "Training Epoch {0} --- Training Accuracy: {1:>6.2%}, Validation Accuracy: {2:>6.2%},  Validation Loss: {3:.3f}"
-                    print(msg.format(i, acc, val_acc, val_loss))  # , val_loss))
-                    sys.stdout.flush()
+                    for j in range(val_batches):
+                        x_valid_batch, y_valid_batch = valid_data.next_batch(400)
+                        feed_dict_val = {X: x_valid_batch, y_true: y_valid_batch}
+                        val_acc += sess.run(accuracy, feed_dict=feed_dict_val)
+                        val_loss += sess.run(cost, feed_dict=feed_dict_val)
+                acc = acc / n_batches
+                val_acc = val_acc / val_batches
+                val_loss = val_loss / val_batches
+                msg = "Training Epoch {0} --- Training Accuracy: {1:>6.2%}, Validation Accuracy: {2:>6.2%},  Validation Loss: {3:.3f}"
+                print(msg.format(i, acc, val_acc, val_loss))  # , val_loss))
+                sys.stdout.flush()
                 if i % saver_step == 0 or val_acc > 0.9:
                     save_path = saver.save(sess, model+"_"+str(n_filters_conv1)+"_"+str(i))
 
