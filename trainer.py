@@ -1,5 +1,6 @@
 import numpy as np
 import os
+import sys
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
@@ -126,6 +127,7 @@ for line in open("MITFaces/faceDS"):
     # And move along
     index += 1
 print("Data loaded")
+sys.stdout.flush()
 
 import tensorflow as tf
 import cv2
@@ -249,6 +251,7 @@ elif task == "Expression":
     model = "models/exp-model"
 else:
     print("Please set task to one of the three options")
+    sys.stdout.flush()
 
 img_size = 128
 num_channels = 1  # greyscale (I think)
@@ -294,6 +297,7 @@ with tf.device('/gpu:0'):
             val_loss = sess.run(cost, feed_dict=feed_dict_val)
             msg = "Pre-training (Epoch {0}) --- Training Accuracy: {1:>6.2%}, Validation Accuracy: {2:>6.2%},  Validation Loss: {3:.3f}"
             print(msg.format(0, 0, val_acc, val_loss))  # , val_loss))
+            sys.stdout.flush()
             for i in range(1, n_epochs + 1):
                 train_data.randomize(sess)
                 train_data.batch_index = 0
@@ -318,6 +322,7 @@ with tf.device('/gpu:0'):
                     # epoch = int(i / int(data.train.num_examples/batch_size))
                     msg = "Training Epoch {0} --- Training Accuracy: {1:>6.2%}, Validation Accuracy: {2:>6.2%},  Validation Loss: {3:.3f}"
                     print(msg.format(i, acc, val_acc, val_loss))  # , val_loss))
+                    sys.stdout.flush()
                 if i % saver_step == 0 or val_acc > 0.9:
                     save_path = saver.save(sess, model+"_"+str(n_filters_conv1)+"_"+str(i))
 
