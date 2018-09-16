@@ -284,7 +284,7 @@ with tf.device('/gpu:0'):
             # Run the initializer
             sess.run(tf.global_variables_initializer())
             # print("Initialised")
-            x_valid_batch, y_valid_batch = valid_data.next_batch(batch_size)
+            x_valid_batch, y_valid_batch = valid_data.next_batch(100)
             feed_dict_val = {X: x_valid_batch, y_true: y_valid_batch}
             val_acc = sess.run(accuracy, feed_dict=feed_dict_val)
             val_loss = sess.run(cost, feed_dict=feed_dict_val)
@@ -306,7 +306,7 @@ with tf.device('/gpu:0'):
                 acc = acc / n_batches
                 if i % display_step == 0:
                     valid_data.batch_index = 0
-                    x_valid_batch, y_valid_batch = valid_data.next_batch(batch_size)
+                    x_valid_batch, y_valid_batch = valid_data.next_batch(100)
                     feed_dict_val = {X: x_valid_batch, y_true: y_valid_batch}
                     # val_loss = sess.run(cost, feed_dict=feed_dict_val)
                     val_acc = sess.run(accuracy, feed_dict=feed_dict_val)
