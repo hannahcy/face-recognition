@@ -322,7 +322,7 @@ with tf.device('/gpu:0'):
                 if i % display_step == 0:
                     valid_data.batch_index = 0
                     for j in range(val_batches):
-                        x_valid_batch, y_valid_batch = valid_data.next_batch(400)
+                        x_valid_batch, y_valid_batch = valid_data.next_batch(batch_size)
                         feed_dict_val = {X: x_valid_batch, y_true: y_valid_batch}
                         val_acc += sess.run(accuracy, feed_dict=feed_dict_val)
                         val_loss += sess.run(cost, feed_dict=feed_dict_val)
