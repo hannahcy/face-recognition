@@ -224,7 +224,7 @@ if task == "Sex":
     train_data = Dataset(trainingFaces, train_labels)
     valid_data = Dataset(validationFaces, valid_labels)
     test_data = Dataset(testingFaces, test_labels)
-    model = "sex-model"
+    model = "models/sex-model"
 elif task == "Age":
     n_classes = 4
     train_labels = make_one_hot(trainingAgeLabels)
@@ -233,7 +233,7 @@ elif task == "Age":
     train_data = Dataset(trainingFaces, train_labels)
     valid_data = Dataset(validationFaces, valid_labels)
     test_data = Dataset(testingFaces, test_labels)
-    model = "age-model"
+    model = "models/age-model"
 elif task == "Expression":
     n_classes = 2
     train_labels = make_one_hot(trainingExpLabels)
@@ -242,7 +242,7 @@ elif task == "Expression":
     train_data = Dataset(trainingFaces, train_labels)
     valid_data = Dataset(validationFaces, valid_labels)
     test_data = Dataset(testingFaces, test_labels)
-    model = "exp-model"
+    model = "models/exp-model"
 else:
     print("Please set task to one of the three options")
 
@@ -315,7 +315,7 @@ with tf.device('/gpu:0'):
                     msg = "Training Epoch {0} --- Training Accuracy: {1:>6.2%}, Validation Accuracy: {2:>6.2%},  Validation Loss: {3:.3f}"
                     print(msg.format(i, acc, val_acc, val_loss))  # , val_loss))
                 if i % saver_step == 0 or val_acc > 0.9:
-                    save_path = saver.save(sess, model + "_" + str(i))
+                    save_path = saver.save(sess, model+"_"+str(n_filters_conv1)+"_"+str(i))
 
 print("Done!")
 # print(numTraining)
