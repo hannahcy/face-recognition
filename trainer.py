@@ -141,11 +141,11 @@ task = "Sex"  # Options are "Sex", "Age", "Expression"
 batch_size = 16
 n_epochs = 1000
 
-n_filters_conv1 = 512
+n_filters_conv1 = 128
 filter_size_conv1 = 3
-n_filters_conv2 = 512
+n_filters_conv2 = 128
 filter_size_conv2 = 3
-n_filters_conv3 = 512
+n_filters_conv3 = 128
 filter_size_conv3 = 3
 fc_layer_size = 1024
 
