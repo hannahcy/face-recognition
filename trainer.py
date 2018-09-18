@@ -130,28 +130,25 @@ print("Data loaded")
 sys.stdout.flush()
 
 import tensorflow as tf
-import cv2
-import scipy
-import random
 
 ####### MODIFIABLE PARAMETERS ######
 
-task = "Sex"  # Options are "Sex", "Age", "Expression"
+task = "Expression"  # Options are "Sex", "Age", "Expression"
 
 batch_size = 16
 n_epochs = 1000
 
-n_filters_conv1 = 64
-filter_size_conv1 = 3
-n_filters_conv2 = 64
-filter_size_conv2 = 3
-n_filters_conv3 = 64
-filter_size_conv3 = 3
+n_filters_conv1 = 128
+filter_size_conv1 = 5
+n_filters_conv2 = 256
+filter_size_conv2 = 5
+n_filters_conv3 = 512
+filter_size_conv3 = 5
 fc_layer_size = 1024
 
 display_step = 1
 saver_step = 10
-
+device = '/cpu:0' # or '/gpu:0'
 
 ####################################
 
@@ -258,7 +255,7 @@ num_channels = 1  # greyscale (I think)
 n_batches = trainingFaces.shape[0] // batch_size
 val_batches = 1000 // batch_size
 
-with tf.device('/gpu:0'):
+with tf.device(device):
     # set up basic (change to GoogLeNet?) model
     g = tf.Graph()
     with g.as_default():
@@ -333,7 +330,9 @@ with tf.device('/gpu:0'):
                 print(msg.format(i, acc, val_acc, val_loss))  # , val_loss))
                 sys.stdout.flush()
                 if i % saver_step == 0 or val_acc > 0.9:
-                    save_path = saver.save(sess, model+"_"+str(n_filters_conv1)+"_"+str(i))
+                    save_path = saver.save(sess, model+"_"+str(n_filters_conv1)+"_"+str(filter_size_conv1)+"_"+
+                                           str(n_filters_conv2) + "_" + str(filter_size_conv2) + "_" +
+                                           str(n_filters_conv3) + "_" + str(filter_size_conv3) + "_" +str(i))
 
 print("Done!")
 # print(numTraining)
