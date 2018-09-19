@@ -138,20 +138,34 @@ task = "Age"  # Options are "Sex", "Age", "Expression"
 batch_size = 16
 n_epochs = 1000
 
-n_filters_conv1 = 64
-filter_size_conv1 = 5
-n_filters_conv2 = 64
+n_filters_conv1 = 128
+filter_size_conv1 = 8
+stride1 = 6
+
+n_filters_conv2 = 128
 filter_size_conv2 = 5
-n_filters_conv3 = 128
+stride2 = 4
+
+n_filters_conv3 = 256
 filter_size_conv3 = 3
-n_filters_conv4 = 128
+stride3 = 1
+
+n_filters_conv4 = 256
 filter_size_conv4 = 3
+stride4 = 1
+
 n_filters_conv5 = 256
 filter_size_conv5 = 3
+stride5 = 1
+
 n_filters_conv6 = 256
 filter_size_conv6 = 3
+stride6 = 1
+
 n_filters_conv7 = 512
 filter_size_conv7 = 3
+stride7 = 1
+
 fc_layer_size = 1024
 
 display_step = 1
@@ -199,10 +213,10 @@ class Dataset:
         return self.data[start:end], self.labels[start:end]
 
 
-def conv_pool_relu_layer(input, n_input, n_filters, filter_size):
+def conv_pool_relu_layer(input, n_input, n_filters, filter_size, stride):
     weights = tf.Variable(tf.truncated_normal(shape=[filter_size, filter_size, n_input, n_filters], stddev=0.05))
     biases = tf.Variable(tf.constant(0.05, shape=[n_filters]))
-    conv_layer = tf.nn.conv2d(input=input, filter=weights, strides=[1, 1, 1, 1], padding='SAME')
+    conv_layer = tf.nn.conv2d(input=input, filter=weights, strides=[1, stride, stride, 1], padding='SAME')
     conv_layer += biases
     c_m_layer = tf.nn.max_pool(value=conv_layer, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
     c_m_r_layer = tf.nn.relu(c_m_layer)
@@ -272,19 +286,19 @@ with tf.device(device):
         y_true = tf.placeholder(tf.float32, shape=[None, n_classes], name='y_true')  # None, 1 OR n_classes
         y_true_class = tf.argmax(y_true, dimension=1)
         conv1 = conv_pool_relu_layer(input=X, n_input=num_channels, n_filters=n_filters_conv1,
-                                     filter_size=filter_size_conv1)
+                                     filter_size=filter_size_conv1, stride = stride1)
         conv2 = conv_pool_relu_layer(input=conv1, n_input=n_filters_conv1, n_filters=n_filters_conv2,
-                                     filter_size=filter_size_conv2)
+                                     filter_size=filter_size_conv2, stride = stride2)
         conv3 = conv_pool_relu_layer(input=conv2, n_input=n_filters_conv2, n_filters=n_filters_conv3,
-                                     filter_size=filter_size_conv3)
+                                     filter_size=filter_size_conv3, stride = stride3)
         conv4 = conv_pool_relu_layer(input=conv3, n_input=n_filters_conv3, n_filters=n_filters_conv4,
-                                     filter_size=filter_size_conv4)
+                                     filter_size=filter_size_conv4, stride = stride4)
         conv5 = conv_pool_relu_layer(input=conv4, n_input=n_filters_conv4, n_filters=n_filters_conv5,
-                                     filter_size=filter_size_conv5)
+                                     filter_size=filter_size_conv5, stride = stride5)
         conv6 = conv_pool_relu_layer(input=conv5, n_input=n_filters_conv5, n_filters=n_filters_conv6,
-                                     filter_size=filter_size_conv6)
+                                     filter_size=filter_size_conv6, stride = stride6)
         conv7 = conv_pool_relu_layer(input=conv6, n_input=n_filters_conv6, n_filters=n_filters_conv7,
-                                     filter_size=filter_size_conv7)
+                                     filter_size=filter_size_conv7, stride = stride7)
         flat = flat_layer(conv7)
         fc1 = fc_layer(input=flat, n_inputs=flat.get_shape()[1:4].num_elements(), n_outputs=fc_layer_size)
         fc2 = fc_layer(input=fc1, n_inputs=fc_layer_size, n_outputs=n_classes, use_relu=False)  # n_outputs=n_classes
