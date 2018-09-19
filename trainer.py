@@ -139,26 +139,23 @@ batch_size = 16
 n_epochs = 1000
 learning_rate = 0.0001
 
-n_filters_conv1 = 128
-filter_size_conv1 = 7
-stride1 = 3
+n_filters_conv1 = 64
+filter_size_conv1 = 3
+stride1 = 1
 
-n_filters_conv2 = 128
-filter_size_conv2 = 5
-stride2 = 2
+n_filters_conv2 = 64
+filter_size_conv2 = 3
+stride2 = 1
 
-n_filters_conv3 = 256
+n_filters_conv3 = 128
 filter_size_conv3 = 3
 stride3 = 1
 
-fc_layer_size = 512
-
-## Not using
-n_filters_conv4 = 64
+n_filters_conv4 = 128
 filter_size_conv4 = 3
 stride4 = 1
 
-n_filters_conv5 = 128
+n_filters_conv5 = 256
 filter_size_conv5 = 3
 stride5 = 1
 
@@ -166,10 +163,36 @@ n_filters_conv6 = 256
 filter_size_conv6 = 3
 stride6 = 1
 
-n_filters_conv7 = 512
+n_filters_conv7 = 256
 filter_size_conv7 = 3
 stride7 = 1
 
+n_filters_conv8 = 512
+filter_size_conv8 = 3
+stride8 = 1
+
+n_filters_conv9 = 512
+filter_size_conv9 = 3
+stride9 = 1
+
+n_filters_conv10 = 512
+filter_size_conv10 = 3
+stride10 = 1
+
+n_filters_conv11 = 512
+filter_size_conv11 = 3
+stride11 = 1
+
+n_filters_conv12 = 512
+filter_size_conv12 = 3
+stride12 = 1
+
+n_filters_conv13 = 512
+filter_size_conv13 = 3
+stride13 = 1
+
+fc1_layer_size = 4096
+fc2_layer_size = 4096
 
 display_step = 1
 saver_step = 10
@@ -293,24 +316,41 @@ with tf.device(device):
         y_true_class = tf.argmax(y_true, dimension=1)
         conv1 = conv_relu_layer(input=X, n_input=num_channels, n_filters=n_filters_conv1,
                                      filter_size=filter_size_conv1, stride = stride1)
-        max1 = maxpool_relu_layer(conv1)
-        conv2 = conv_relu_layer(input=max1, n_input=n_filters_conv1, n_filters=n_filters_conv2,
+        conv2 = conv_relu_layer(input=conv1, n_input=n_filters_conv1, n_filters=n_filters_conv2,
                                      filter_size=filter_size_conv2, stride = stride2)
-        max2 = maxpool_relu_layer(conv2)
-        conv3 = conv_relu_layer(input=max2, n_input=n_filters_conv2, n_filters=n_filters_conv3,
-                                     filter_size=filter_size_conv3, stride = stride3)
-        max3 = maxpool_relu_layer(conv3)
-        #conv4 = conv_pool_relu_layer(input=conv3, n_input=n_filters_conv3, n_filters=n_filters_conv4,
-        #                             filter_size=filter_size_conv4, stride = stride4)
-        #conv5 = conv_pool_relu_layer(input=conv4, n_input=n_filters_conv4, n_filters=n_filters_conv5,
-        #                             filter_size=filter_size_conv5, stride = stride5)
-        #conv6 = conv_pool_relu_layer(input=conv5, n_input=n_filters_conv5, n_filters=n_filters_conv6,
-        #                             filter_size=filter_size_conv6, stride = stride6)
-        #conv7 = conv_pool_relu_layer(input=conv6, n_input=n_filters_conv6, n_filters=n_filters_conv7,
-        #                             filter_size=filter_size_conv7, stride = stride7)
-        flat = flat_layer(max3)
-        fc1 = fc_layer(input=flat, n_inputs=flat.get_shape()[1:4].num_elements(), n_outputs=fc_layer_size)
-        fc2 = fc_layer(input=fc1, n_inputs=fc_layer_size, n_outputs=n_classes, use_relu=False)  # n_outputs=n_classes
+        max1 = maxpool_relu_layer(conv2)
+        conv3 = conv_relu_layer(input=max1, n_input=n_filters_conv2, n_filters=n_filters_conv3,
+                                filter_size=filter_size_conv3, stride=stride3)
+        conv4 = conv_relu_layer(input=conv3, n_input=n_filters_conv3, n_filters=n_filters_conv4,
+                                filter_size=filter_size_conv4, stride=stride4)
+        max2 = maxpool_relu_layer(conv4)
+        conv5 = conv_relu_layer(input=max2, n_input=n_filters_conv4, n_filters=n_filters_conv5,
+                                     filter_size=filter_size_conv5, stride = stride5)
+        conv6 = conv_relu_layer(input=conv5, n_input=n_filters_conv5, n_filters=n_filters_conv6,
+                                     filter_size=filter_size_conv6, stride = stride6)
+        conv7 = conv_relu_layer(input=conv6, n_input=n_filters_conv6, n_filters=n_filters_conv7,
+                                     filter_size=filter_size_conv7, stride = stride7)
+        max3 = maxpool_relu_layer(conv7)
+        conv8 = conv_relu_layer(input=max3, n_input=n_filters_conv7, n_filters=n_filters_conv8,
+                                     filter_size=filter_size_conv8, stride=stride8)
+        conv9 = conv_relu_layer(input=conv8, n_input=n_filters_conv8, n_filters=n_filters_conv9,
+                                     filter_size=filter_size_conv9, stride=stride9)
+        conv10 = conv_relu_layer(input=conv9, n_input=n_filters_conv9, n_filters=n_filters_conv10,
+                                filter_size=filter_size_conv10, stride=stride10)
+        max4 = maxpool_relu_layer(conv10)
+        conv11 = conv_relu_layer(input=max4, n_input=n_filters_conv10, n_filters=n_filters_conv11,
+                                filter_size=filter_size_conv11, stride=stride11)
+        conv12 = conv_relu_layer(input=conv11, n_input=n_filters_conv11, n_filters=n_filters_conv12,
+                                 filter_size=filter_size_conv12, stride=stride12)
+        conv13 = conv_relu_layer(input=conv12, n_input=n_filters_conv12, n_filters=n_filters_conv13,
+                                 filter_size=filter_size_conv13, stride=stride13)
+
+        max5 = maxpool_relu_layer(conv13)
+        #flat = flat_layer(max3)
+        #fc1 = fc_layer(input=flat, n_inputs=flat.get_shape()[1:4].num_elements(), n_outputs=fc_layer_size)
+        fc1 = fc_layer(input=max5, n_inputs=filter_size_conv13, n_outputs=fc1_layer_size)
+        fc1 = fc_layer(input=fc1, n_inputs=fc1_layer_size, n_outputs=fc2_layer_size)
+        fc3 = fc_layer(input=fc2, n_inputs=fc2_layer_size, n_outputs=n_classes, use_relu=False)  # n_outputs=n_classes
         y_pred = tf.nn.softmax(fc2, name="y_pred")
         y_pred_class = tf.argmax(y_pred, dimension=1)
         cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=fc2, labels=y_true)
