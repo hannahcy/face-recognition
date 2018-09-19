@@ -137,6 +137,7 @@ task = "Sex"  # Options are "Sex", "Age", "Expression"
 
 batch_size = 16
 n_epochs = 1000
+learning_rate = 0.0001
 
 n_filters_conv1 = 128
 filter_size_conv1 = 7
@@ -308,7 +309,7 @@ with tf.device(device):
         y_pred_class = tf.argmax(y_pred, dimension=1)
         cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=fc2, labels=y_true)
         cost = tf.reduce_mean(cross_entropy)
-        optimizer = tf.train.AdamOptimizer(learning_rate=1e-4).minimize(cost)
+        optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
         correct_prediction = tf.equal(y_pred_class, y_true_class)
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), name="accuracy")
         # print("Graph initialised")
