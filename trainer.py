@@ -133,23 +133,26 @@ import tensorflow as tf
 
 ####### MODIFIABLE PARAMETERS ######
 
-task = "Age"  # Options are "Sex", "Age", "Expression"
+task = "Sex"  # Options are "Sex", "Age", "Expression"
 
 batch_size = 16
 n_epochs = 1000
 
-n_filters_conv1 = 32
+n_filters_conv1 = 64
 filter_size_conv1 = 7
 stride1 = 3
 
-n_filters_conv2 = 32
+n_filters_conv2 = 128
 filter_size_conv2 = 5
 stride2 = 2
 
-n_filters_conv3 = 64
+n_filters_conv3 = 256
 filter_size_conv3 = 3
 stride3 = 1
 
+fc_layer_size = 512
+
+## Not using
 n_filters_conv4 = 64
 filter_size_conv4 = 3
 stride4 = 1
@@ -166,7 +169,6 @@ n_filters_conv7 = 512
 filter_size_conv7 = 3
 stride7 = 1
 
-fc_layer_size = 1024
 
 display_step = 1
 saver_step = 10
@@ -291,15 +293,15 @@ with tf.device(device):
                                      filter_size=filter_size_conv2, stride = stride2)
         conv3 = conv_pool_relu_layer(input=conv2, n_input=n_filters_conv2, n_filters=n_filters_conv3,
                                      filter_size=filter_size_conv3, stride = stride3)
-        conv4 = conv_pool_relu_layer(input=conv3, n_input=n_filters_conv3, n_filters=n_filters_conv4,
-                                     filter_size=filter_size_conv4, stride = stride4)
-        conv5 = conv_pool_relu_layer(input=conv4, n_input=n_filters_conv4, n_filters=n_filters_conv5,
-                                     filter_size=filter_size_conv5, stride = stride5)
-        conv6 = conv_pool_relu_layer(input=conv5, n_input=n_filters_conv5, n_filters=n_filters_conv6,
-                                     filter_size=filter_size_conv6, stride = stride6)
-        conv7 = conv_pool_relu_layer(input=conv6, n_input=n_filters_conv6, n_filters=n_filters_conv7,
-                                     filter_size=filter_size_conv7, stride = stride7)
-        flat = flat_layer(conv7)
+        #conv4 = conv_pool_relu_layer(input=conv3, n_input=n_filters_conv3, n_filters=n_filters_conv4,
+        #                             filter_size=filter_size_conv4, stride = stride4)
+        #conv5 = conv_pool_relu_layer(input=conv4, n_input=n_filters_conv4, n_filters=n_filters_conv5,
+        #                             filter_size=filter_size_conv5, stride = stride5)
+        #conv6 = conv_pool_relu_layer(input=conv5, n_input=n_filters_conv5, n_filters=n_filters_conv6,
+        #                             filter_size=filter_size_conv6, stride = stride6)
+        #conv7 = conv_pool_relu_layer(input=conv6, n_input=n_filters_conv6, n_filters=n_filters_conv7,
+        #                             filter_size=filter_size_conv7, stride = stride7)
+        flat = flat_layer(conv3)
         fc1 = fc_layer(input=flat, n_inputs=flat.get_shape()[1:4].num_elements(), n_outputs=fc_layer_size)
         fc2 = fc_layer(input=fc1, n_inputs=fc_layer_size, n_outputs=n_classes, use_relu=False)  # n_outputs=n_classes
         y_pred = tf.nn.softmax(fc2, name="y_pred")
@@ -362,11 +364,7 @@ with tf.device(device):
                 if i % saver_step == 0 or val_acc > 0.9:
                     save_path = saver.save(sess, model+"_"+str(n_filters_conv1)+"_"+str(filter_size_conv1)+"_"+
                                            str(n_filters_conv2) + "_" + str(filter_size_conv2) + "_" +
-                                           str(n_filters_conv3) + "_" + str(filter_size_conv3) + "_" +
-                                           str(n_filters_conv4) + "_" + str(filter_size_conv4) + "_" +
-                                           str(n_filters_conv5) + "_" + str(filter_size_conv5) + "_" +
-                                           str(n_filters_conv6) + "_" + str(filter_size_conv6) + "_" +
-                                           str(n_filters_conv7) + "_" + str(filter_size_conv7) + "_" +str(i))
+                                           str(n_filters_conv3) + "_" + str(filter_size_conv3) + "_" +str(i))
 
 print("Done!")
 # print(numTraining)
