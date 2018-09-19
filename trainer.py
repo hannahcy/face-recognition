@@ -138,16 +138,20 @@ task = "Age"  # Options are "Sex", "Age", "Expression"
 batch_size = 16
 n_epochs = 1000
 
-n_filters_conv1 = 256
+n_filters_conv1 = 64
 filter_size_conv1 = 5
-n_filters_conv2 = 256
+n_filters_conv2 = 64
 filter_size_conv2 = 5
-n_filters_conv3 = 512
+n_filters_conv3 = 128
 filter_size_conv3 = 3
-n_filters_conv4 = 512
+n_filters_conv4 = 128
 filter_size_conv4 = 3
-n_filters_conv5 = 1024
+n_filters_conv5 = 256
 filter_size_conv5 = 3
+n_filters_conv6 = 256
+filter_size_conv6 = 3
+n_filters_conv7 = 512
+filter_size_conv7 = 3
 fc_layer_size = 1024
 
 display_step = 1
@@ -277,7 +281,11 @@ with tf.device(device):
                                      filter_size=filter_size_conv4)
         conv5 = conv_pool_relu_layer(input=conv4, n_input=n_filters_conv4, n_filters=n_filters_conv5,
                                      filter_size=filter_size_conv5)
-        flat = flat_layer(conv5)
+        conv6 = conv_pool_relu_layer(input=conv5, n_input=n_filters_conv5, n_filters=n_filters_conv6,
+                                     filter_size=filter_size_conv6)
+        conv7 = conv_pool_relu_layer(input=conv6, n_input=n_filters_conv6, n_filters=n_filters_conv7,
+                                     filter_size=filter_size_conv7)
+        flat = flat_layer(conv7)
         fc1 = fc_layer(input=flat, n_inputs=flat.get_shape()[1:4].num_elements(), n_outputs=fc_layer_size)
         fc2 = fc_layer(input=fc1, n_inputs=fc_layer_size, n_outputs=n_classes, use_relu=False)  # n_outputs=n_classes
         y_pred = tf.nn.softmax(fc2, name="y_pred")
@@ -340,7 +348,11 @@ with tf.device(device):
                 if i % saver_step == 0 or val_acc > 0.9:
                     save_path = saver.save(sess, model+"_"+str(n_filters_conv1)+"_"+str(filter_size_conv1)+"_"+
                                            str(n_filters_conv2) + "_" + str(filter_size_conv2) + "_" +
-                                           str(n_filters_conv3) + "_" + str(filter_size_conv3) + "_" +str(i))
+                                           str(n_filters_conv3) + "_" + str(filter_size_conv3) + "_" +
+                                           str(n_filters_conv4) + "_" + str(filter_size_conv4) + "_" +
+                                           str(n_filters_conv5) + "_" + str(filter_size_conv5) + "_" +
+                                           str(n_filters_conv6) + "_" + str(filter_size_conv6) + "_" +
+                                           str(n_filters_conv7) + "_" + str(filter_size_conv7) + "_" +str(i))
 
 print("Done!")
 # print(numTraining)
