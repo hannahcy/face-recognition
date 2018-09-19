@@ -137,7 +137,7 @@ task = "Sex"  # Options are "Sex", "Age", "Expression"
 
 batch_size = 16
 n_epochs = 1000
-learning_rate = 0.00001
+learning_rate = 0.001
 
 n_filters_conv1 = 128
 filter_size_conv1 = 7
