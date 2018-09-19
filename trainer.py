@@ -138,17 +138,17 @@ task = "Age"  # Options are "Sex", "Age", "Expression"
 batch_size = 16
 n_epochs = 1000
 
-n_filters_conv1 = 128
-filter_size_conv1 = 5
+n_filters_conv1 = 256
+filter_size_conv1 = 7
 n_filters_conv2 = 256
 filter_size_conv2 = 5
 n_filters_conv3 = 512
-filter_size_conv3 = 5
+filter_size_conv3 = 3
 fc_layer_size = 1024
 
 display_step = 1
 saver_step = 10
-device = '/cpu:0' # or '/gpu:0'
+device = '/gpu:0' # or '/gpu:0'
 
 ####################################
 
