@@ -139,11 +139,15 @@ batch_size = 16
 n_epochs = 1000
 
 n_filters_conv1 = 256
-filter_size_conv1 = 7
+filter_size_conv1 = 5
 n_filters_conv2 = 256
 filter_size_conv2 = 5
 n_filters_conv3 = 512
 filter_size_conv3 = 3
+n_filters_conv4 = 512
+filter_size_conv4 = 3
+n_filters_conv5 = 1024
+filter_size_conv5 = 3
 fc_layer_size = 1024
 
 display_step = 1
@@ -269,7 +273,11 @@ with tf.device(device):
                                      filter_size=filter_size_conv2)
         conv3 = conv_pool_relu_layer(input=conv2, n_input=n_filters_conv2, n_filters=n_filters_conv3,
                                      filter_size=filter_size_conv3)
-        flat = flat_layer(conv3)
+        conv4 = conv_pool_relu_layer(input=conv3, n_input=n_filters_conv3, n_filters=n_filters_conv4,
+                                     filter_size=filter_size_conv4)
+        conv5 = conv_pool_relu_layer(input=conv4, n_input=n_filters_conv4, n_filters=n_filters_conv5,
+                                     filter_size=filter_size_conv5)
+        flat = flat_layer(conv5)
         fc1 = fc_layer(input=flat, n_inputs=flat.get_shape()[1:4].num_elements(), n_outputs=fc_layer_size)
         fc2 = fc_layer(input=fc1, n_inputs=fc_layer_size, n_outputs=n_classes, use_relu=False)  # n_outputs=n_classes
         y_pred = tf.nn.softmax(fc2, name="y_pred")
