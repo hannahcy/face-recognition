@@ -138,7 +138,7 @@ task = "Sex"  # Options are "Sex", "Age", "Expression"
 batch_size = 16
 n_epochs = 1000
 
-n_filters_conv1 = 64
+n_filters_conv1 = 128
 filter_size_conv1 = 7
 stride1 = 3
 
