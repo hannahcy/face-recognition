@@ -353,7 +353,7 @@ with tf.device(device):
         fc3 = fc_layer(input=fc2, n_inputs=fc2_layer_size, n_outputs=n_classes, use_relu=False)  # n_outputs=n_classes
         y_pred = tf.nn.softmax(fc2, name="y_pred")
         y_pred_class = tf.argmax(y_pred, dimension=1)
-        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=fc2, labels=y_true)
+        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=fc3, labels=y_true)
         cost = tf.reduce_mean(cross_entropy)
         optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
         correct_prediction = tf.equal(y_pred_class, y_true_class)
