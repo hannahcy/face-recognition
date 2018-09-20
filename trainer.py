@@ -258,7 +258,6 @@ def flat_layer(input_layer):
     flat_layer = tf.reshape(input_layer, [-1, num_features])
     return flat_layer
 
-
 def fc_layer(input, n_inputs, n_outputs, use_relu=True):
     weights = tf.Variable(tf.truncated_normal(shape=[n_inputs, n_outputs], stddev=0.05))
     biases = tf.Variable(tf.constant(0.05, shape=[n_outputs]))
@@ -302,18 +301,18 @@ else:
     sys.stdout.flush()
 
 img_size = 128
-num_channels = 1  # greyscale (I think)
+num_channels = 1  # greyscale
 n_batches = trainingFaces.shape[0] // batch_size
-val_batches = 1000 // batch_size
+val_batches = validationFaces.shape[0] // batch_size
 
 with tf.device(device):
-    # set up basic (change to GoogLeNet?) model
+    # set up VGG
     g = tf.Graph()
     with g.as_default():
         X = tf.placeholder(tf.float32, shape=[None, img_size, img_size, num_channels], name='X')
-        # print(X.shape)
-        y_true = tf.placeholder(tf.float32, shape=[None, n_classes], name='y_true')  # None, 1 OR n_classes
+        y_true = tf.placeholder(tf.float32, shape=[None, n_classes], name='y_true')
         y_true_class = tf.argmax(y_true, dimension=1)
+
         conv1 = conv_relu_layer(input=X, n_input=num_channels, n_filters=n_filters_conv1,
                                      filter_size=filter_size_conv1, stride = stride1)
         conv2 = conv_relu_layer(input=conv1, n_input=n_filters_conv1, n_filters=n_filters_conv2,
@@ -351,7 +350,7 @@ with tf.device(device):
         #fc1 = fc_layer(input=max5, n_inputs=filter_size_conv13, n_outputs=fc1_layer_size)
         fc2 = fc_layer(input=fc1, n_inputs=fc1_layer_size, n_outputs=fc2_layer_size)
         fc3 = fc_layer(input=fc2, n_inputs=fc2_layer_size, n_outputs=n_classes, use_relu=False)  # n_outputs=n_classes
-        y_pred = tf.nn.softmax(fc2, name="y_pred")
+        y_pred = tf.nn.softmax(fc3, name="y_pred")
         y_pred_class = tf.argmax(y_pred, dimension=1)
         cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=fc3, labels=y_true)
         cost = tf.reduce_mean(cross_entropy)
