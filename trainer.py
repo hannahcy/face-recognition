@@ -277,6 +277,13 @@ def maxpool_relu_layer(input):
     m_r_layer = tf.nn.relu(m_layer)
     return m_r_layer
 
+def conv_pool_layer(input, n_input, n_filters, filter_size, stride):
+    weights = tf.Variable(tf.truncated_normal(shape=[filter_size, filter_size, n_input, n_filters], stddev=0.05))
+    biases = tf.Variable(tf.constant(0.05, shape=[n_filters]))
+    conv_layer = tf.nn.conv2d(input=input, filter=weights, strides=[1, stride, stride, 1], padding='SAME')
+    conv_layer += biases
+    return conv_layer
+
 def flat_layer(input_layer):
     shape = input_layer.get_shape()
     num_features = shape[1:4].num_elements()
