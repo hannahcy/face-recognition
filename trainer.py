@@ -407,10 +407,8 @@ with tf.device(device):
                 msg = "Training Epoch {0} --- Training Accuracy: {1:>6.2%}, Validation Accuracy: {2:>6.2%},  Validation Loss: {3:.3f}"
                 print(msg.format(i, acc, val_acc, val_loss))  # , val_loss))
                 sys.stdout.flush()
-                if i % saver_step == 0 or val_acc > 0.9:
-                    save_path = saver.save(sess, model+"_"+str(n_filters_conv1)+"_"+str(filter_size_conv1)+"_"+
-                                           str(n_filters_conv2) + "_" + str(filter_size_conv2) + "_" +
-                                           str(n_filters_conv3) + "_" + str(filter_size_conv3) + "_" +str(i))
+                if i % saver_step == 0 or val_acc > 0.85:
+                    save_path = saver.save(sess, model+"_vggC_"+str(i))
 
 print("Done!")
 # print(numTraining)
