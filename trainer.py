@@ -134,7 +134,8 @@ import tensorflow as tf
 ####### MODIFIABLE PARAMETERS ######
 
 task = "Sex"  # Options are "Sex", "Age", "Expression"
-name = "vggE" # Options are "vggC", "vggD", "vggE"
+network = "vggE" # Options are "vggC", "vggD", "vggE", "vggE1"
+device = '/gpu:0' # '/cpu:0' or '/gpu:0'
 
 batch_size = 16
 n_epochs = 1000
@@ -167,7 +168,7 @@ stride6 = 1
 n_filters_conv7 = 256
 filter_size_conv7 = 3
 stride7 = 1
-if name == 'vggC':
+if network == "vggC" or network == "vggE1":
     filter_size_conv7 = 1
 
 n_filters_conv75 = 256 ## used for vggE only
@@ -185,7 +186,7 @@ stride9 = 1
 n_filters_conv10 = 512
 filter_size_conv10 = 3
 stride10 = 1
-if name == 'vggC':
+if network == "vggC" or network == "vggE1":
     filter_size_conv10 = 1
 
 n_filters_conv105 = 512 ## used for vggE only
@@ -203,7 +204,7 @@ stride12 = 1
 n_filters_conv13 = 512
 filter_size_conv13 = 3
 stride13 = 1
-if name == 'vggC':
+if network == "vggC" or network == "vggE1":
     filter_size_conv13 = 1
 
 n_filters_conv135 = 512 ## used for vggE only
@@ -215,7 +216,6 @@ fc2_layer_size = 4096
 
 display_step = 1
 saver_step = 10
-device = '/gpu:0' # or '/gpu:0'
 
 ####################################
 
@@ -333,9 +333,9 @@ with tf.device(device):
         y_true_class = tf.argmax(y_true, dimension=1)
 
         conv1 = conv_relu_layer(input=X, n_input=num_channels, n_filters=n_filters_conv1,
-                                     filter_size=filter_size_conv1, stride = stride1)
+                                filter_size=filter_size_conv1, stride = stride1)
         conv2 = conv_relu_layer(input=conv1, n_input=n_filters_conv1, n_filters=n_filters_conv2,
-                                     filter_size=filter_size_conv2, stride = stride2)
+                                filter_size=filter_size_conv2, stride = stride2)
         max1 = maxpool_relu_layer(conv2)
         conv3 = conv_relu_layer(input=max1, n_input=n_filters_conv2, n_filters=n_filters_conv3,
                                 filter_size=filter_size_conv3, stride=stride3)
@@ -343,32 +343,41 @@ with tf.device(device):
                                 filter_size=filter_size_conv4, stride=stride4)
         max2 = maxpool_relu_layer(conv4)
         conv5 = conv_relu_layer(input=max2, n_input=n_filters_conv4, n_filters=n_filters_conv5,
-                                     filter_size=filter_size_conv5, stride = stride5)
+                                filter_size=filter_size_conv5, stride = stride5)
         conv6 = conv_relu_layer(input=conv5, n_input=n_filters_conv5, n_filters=n_filters_conv6,
-                                     filter_size=filter_size_conv6, stride = stride6)
+                                filter_size=filter_size_conv6, stride = stride6)
         conv7 = conv_relu_layer(input=conv6, n_input=n_filters_conv6, n_filters=n_filters_conv7,
-                                     filter_size=filter_size_conv7, stride = stride7)
-        conv75 = conv_relu_layer(input=conv7, n_input=n_filters_conv7, n_filters=n_filters_conv75,
-                                filter_size=filter_size_conv75, stride=stride75)
-        max3 = maxpool_relu_layer(conv75)
+                                filter_size=filter_size_conv7, stride = stride7)
+        if network == "vggE" or network == "vggE1":
+            conv75 = conv_relu_layer(input=conv7, n_input=n_filters_conv7, n_filters=n_filters_conv75,
+                                     filter_size=filter_size_conv75, stride=stride75)
+            max3 = maxpool_relu_layer(conv75)
+        else:
+            max3 = maxpool_relu_layer(conv7)
         conv8 = conv_relu_layer(input=max3, n_input=n_filters_conv7, n_filters=n_filters_conv8,
-                                     filter_size=filter_size_conv8, stride=stride8)
+                                filter_size=filter_size_conv8, stride=stride8)
         conv9 = conv_relu_layer(input=conv8, n_input=n_filters_conv8, n_filters=n_filters_conv9,
-                                     filter_size=filter_size_conv9, stride=stride9)
+                                filter_size=filter_size_conv9, stride=stride9)
         conv10 = conv_relu_layer(input=conv9, n_input=n_filters_conv9, n_filters=n_filters_conv10,
                                 filter_size=filter_size_conv10, stride=stride10)
-        conv105 = conv_relu_layer(input=conv10, n_input=n_filters_conv10, n_filters=n_filters_conv105,
-                                 filter_size=filter_size_conv105, stride=stride105)
-        max4 = maxpool_relu_layer(conv105)
+        if network == "vggE" or network == "vggE1":
+            conv105 = conv_relu_layer(input=conv10, n_input=n_filters_conv10, n_filters=n_filters_conv105,
+                                      filter_size=filter_size_conv105, stride=stride105)
+            max4 = maxpool_relu_layer(conv105)
+        else:
+            max4 = maxpool_relu_layer(conv10)
         conv11 = conv_relu_layer(input=max4, n_input=n_filters_conv10, n_filters=n_filters_conv11,
-                                filter_size=filter_size_conv11, stride=stride11)
+                                 filter_size=filter_size_conv11, stride=stride11)
         conv12 = conv_relu_layer(input=conv11, n_input=n_filters_conv11, n_filters=n_filters_conv12,
                                  filter_size=filter_size_conv12, stride=stride12)
         conv13 = conv_relu_layer(input=conv12, n_input=n_filters_conv12, n_filters=n_filters_conv13,
                                  filter_size=filter_size_conv13, stride=stride13)
-        conv135 = conv_relu_layer(input=conv13, n_input=n_filters_conv13, n_filters=n_filters_conv135,
-                                 filter_size=filter_size_conv135, stride=stride135)
-        max5 = maxpool_relu_layer(conv135)
+        if network == "vggE" or network == "vggE1":
+            conv135 = conv_relu_layer(input=conv13, n_input=n_filters_conv13, n_filters=n_filters_conv135,
+                                      filter_size=filter_size_conv135, stride=stride135)
+            max5 = maxpool_relu_layer(conv135)
+        else:
+            max5 = maxpool_relu_layer(conv13)
         flat = flat_layer(max5)
         fc1 = fc_layer(input=flat, n_inputs=flat.get_shape()[1:4].num_elements(), n_outputs=fc1_layer_size)
         #fc1 = fc_layer(input=max5, n_inputs=filter_size_conv13, n_outputs=fc1_layer_size)
@@ -432,7 +441,7 @@ with tf.device(device):
                 print(msg.format(i, acc, val_acc, val_loss))  # , val_loss))
                 sys.stdout.flush()
                 if i % saver_step == 0 or val_acc > 0.85:
-                    save_path = saver.save(sess, model+"_"+name+"_"+str(i))
+                    save_path = saver.save(sess, model+"_"+network+"_"+str(i))
 
 print("Done!")
 # print(numTraining)
