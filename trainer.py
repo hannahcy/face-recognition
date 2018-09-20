@@ -134,7 +134,7 @@ import tensorflow as tf
 ####### MODIFIABLE PARAMETERS ######
 
 task = "Sex"  # Options are "Sex", "Age", "Expression"
-name = "vggD"
+name = "vggE"
 
 batch_size = 16
 n_epochs = 1000
@@ -168,6 +168,10 @@ n_filters_conv7 = 256
 filter_size_conv7 = 3
 stride7 = 1
 
+n_filters_conv75 = 256 ## used for vggE only
+filter_size_conv75 = 3
+stride75 = 1
+
 n_filters_conv8 = 512
 filter_size_conv8 = 3
 stride8 = 1
@@ -180,6 +184,10 @@ n_filters_conv10 = 512
 filter_size_conv10 = 3
 stride10 = 1
 
+n_filters_conv105 = 512 ## used for vggE only
+filter_size_conv105 = 3
+stride105 = 1
+
 n_filters_conv11 = 512
 filter_size_conv11 = 3
 stride11 = 1
@@ -191,6 +199,10 @@ stride12 = 1
 n_filters_conv13 = 512
 filter_size_conv13 = 3
 stride13 = 1
+
+n_filters_conv135 = 512 ## used for vggE only
+filter_size_conv135 = 3
+stride135 = 1
 
 fc1_layer_size = 4096
 fc2_layer_size = 4096
@@ -330,22 +342,27 @@ with tf.device(device):
                                      filter_size=filter_size_conv6, stride = stride6)
         conv7 = conv_relu_layer(input=conv6, n_input=n_filters_conv6, n_filters=n_filters_conv7,
                                      filter_size=filter_size_conv7, stride = stride7)
-        max3 = maxpool_relu_layer(conv7)
+        conv75 = conv_relu_layer(input=conv7, n_input=n_filters_conv7, n_filters=n_filters_conv75,
+                                filter_size=filter_size_conv75, stride=stride75)
+        max3 = maxpool_relu_layer(conv75)
         conv8 = conv_relu_layer(input=max3, n_input=n_filters_conv7, n_filters=n_filters_conv8,
                                      filter_size=filter_size_conv8, stride=stride8)
         conv9 = conv_relu_layer(input=conv8, n_input=n_filters_conv8, n_filters=n_filters_conv9,
                                      filter_size=filter_size_conv9, stride=stride9)
         conv10 = conv_relu_layer(input=conv9, n_input=n_filters_conv9, n_filters=n_filters_conv10,
                                 filter_size=filter_size_conv10, stride=stride10)
-        max4 = maxpool_relu_layer(conv10)
+        conv105 = conv_relu_layer(input=conv10, n_input=n_filters_conv10, n_filters=n_filters_conv105,
+                                 filter_size=filter_size_conv105, stride=stride105)
+        max4 = maxpool_relu_layer(conv105)
         conv11 = conv_relu_layer(input=max4, n_input=n_filters_conv10, n_filters=n_filters_conv11,
                                 filter_size=filter_size_conv11, stride=stride11)
         conv12 = conv_relu_layer(input=conv11, n_input=n_filters_conv11, n_filters=n_filters_conv12,
                                  filter_size=filter_size_conv12, stride=stride12)
         conv13 = conv_relu_layer(input=conv12, n_input=n_filters_conv12, n_filters=n_filters_conv13,
                                  filter_size=filter_size_conv13, stride=stride13)
-
-        max5 = maxpool_relu_layer(conv13)
+        conv135 = conv_relu_layer(input=conv13, n_input=n_filters_conv13, n_filters=n_filters_conv135,
+                                 filter_size=filter_size_conv135, stride=stride135)
+        max5 = maxpool_relu_layer(conv135)
         flat = flat_layer(max5)
         fc1 = fc_layer(input=flat, n_inputs=flat.get_shape()[1:4].num_elements(), n_outputs=fc1_layer_size)
         #fc1 = fc_layer(input=max5, n_inputs=filter_size_conv13, n_outputs=fc1_layer_size)
