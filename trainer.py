@@ -134,6 +134,7 @@ import tensorflow as tf
 ####### MODIFIABLE PARAMETERS ######
 
 task = "Sex"  # Options are "Sex", "Age", "Expression"
+name = "vggD"
 
 batch_size = 16
 n_epochs = 1000
@@ -164,7 +165,7 @@ filter_size_conv6 = 3
 stride6 = 1
 
 n_filters_conv7 = 256
-filter_size_conv7 = 1
+filter_size_conv7 = 3
 stride7 = 1
 
 n_filters_conv8 = 512
@@ -176,7 +177,7 @@ filter_size_conv9 = 3
 stride9 = 1
 
 n_filters_conv10 = 512
-filter_size_conv10 = 1
+filter_size_conv10 = 3
 stride10 = 1
 
 n_filters_conv11 = 512
@@ -188,7 +189,7 @@ filter_size_conv12 = 3
 stride12 = 1
 
 n_filters_conv13 = 512
-filter_size_conv13 = 1
+filter_size_conv13 = 3
 stride13 = 1
 
 fc1_layer_size = 4096
@@ -408,7 +409,7 @@ with tf.device(device):
                 print(msg.format(i, acc, val_acc, val_loss))  # , val_loss))
                 sys.stdout.flush()
                 if i % saver_step == 0 or val_acc > 0.85:
-                    save_path = saver.save(sess, model+"_vggC_"+str(i))
+                    save_path = saver.save(sess, model+"_"+name+"_"+str(i))
 
 print("Done!")
 # print(numTraining)
