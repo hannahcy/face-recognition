@@ -168,12 +168,14 @@ stride6 = 1
 n_filters_conv7 = 256
 filter_size_conv7 = 3
 stride7 = 1
-if network == "vggC" or network == "vggE1":
+if network == "vggC":
     filter_size_conv7 = 1
 
-n_filters_conv75 = 256 ## used for vggE only
+n_filters_conv75 = 256 ## used for vggE and vggE1 only
 filter_size_conv75 = 3
 stride75 = 1
+if network == "vggE1":
+    filter_size_conv75 = 1
 
 n_filters_conv8 = 512
 filter_size_conv8 = 3
@@ -186,12 +188,14 @@ stride9 = 1
 n_filters_conv10 = 512
 filter_size_conv10 = 3
 stride10 = 1
-if network == "vggC" or network == "vggE1":
+if network == "vggC":
     filter_size_conv10 = 1
 
-n_filters_conv105 = 512 ## used for vggE only
+n_filters_conv105 = 512 ## used for vggE and vggE1 only
 filter_size_conv105 = 3
 stride105 = 1
+if network == "vggE1":
+    filter_size_conv105 = 1
 
 n_filters_conv11 = 512
 filter_size_conv11 = 3
@@ -204,12 +208,14 @@ stride12 = 1
 n_filters_conv13 = 512
 filter_size_conv13 = 3
 stride13 = 1
-if network == "vggC" or network == "vggE1":
+if network == "vggC":
     filter_size_conv13 = 1
 
-n_filters_conv135 = 512 ## used for vggE only
+n_filters_conv135 = 512 ## used for vggE and vggE1 only
 filter_size_conv135 = 3
 stride135 = 1
+if network == "vggE1":
+    filter_size_conv135 = 1
 
 fc1_layer_size = 4096
 fc2_layer_size = 4096
