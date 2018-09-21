@@ -133,7 +133,7 @@ import tensorflow as tf
 
 ####### MODIFIABLE PARAMETERS ######
 
-task = "Sex"  # Options are "Sex", "Age", "Expression"
+task = "Expression"  # Options are "Sex", "Age", "Expression"
 network = "vggE1" # Options are "vggC", "vggD", "vggE", "vggE1"
 device = '/gpu:0' # '/cpu:0' or '/gpu:0'
 
@@ -329,6 +329,7 @@ img_size = 128
 num_channels = 1  # greyscale
 n_batches = trainingFaces.shape[0] // batch_size
 val_batches = validationFaces.shape[0] // batch_size
+test_batches = testingFaces.shape[0] // batch_size
 
 with tf.device(device):
     # set up VGG
@@ -400,20 +401,20 @@ with tf.device(device):
 
         saver = tf.train.Saver()
 
-        tf.reset_default_graph()
-        # Create some variables.
-        accuracy = tf.get_variable("accuracy", shape=[3])
-        # v2 = tf.get_variable("v2", shape=[5])
-
         # Later, launch the model, use the saver to restore variables from disk, and
         # do some work with the model.
         with tf.Session() as sess:
             # Restore variables from disk.
-            saver.restore(sess, "models/sex-model_128_60")
+            saver.restore(sess, "models/exp-model_vggE1_719")
             print("Model restored.")
-            # Check the values of the variables
-            print("v1 : %s" % accuracy.eval())
-            # print("v2 : %s" % v2.eval())
+            test_acc = 0
+            for test in range(test_batches):
+                x_test_batch, y_test_batch = test_data.next_batch(batch_size)
+                feed_dict_val = {X: x_test_batch, y_true: y_test_batch}
+                test_acc += sess.run(accuracy, feed_dict=feed_dict_val)
+            test_acc = (test_acc / test_batches) * 100
+            print("Test accuracy: "+"{0:.2f}".format(test_acc)+"%")  # , val_loss))
+            sys.stdout.flush()
 
 
 def computeLabels(faceData):
