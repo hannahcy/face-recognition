@@ -139,7 +139,7 @@ device = '/cpu:0' # '/cpu:0' or '/gpu:0'
 
 batch_size = 16
 n_epochs = 1000
-learning_rate = 0.0001
+learning_rate = 0.01
 
 display_step = 1
 saver_step = 10
