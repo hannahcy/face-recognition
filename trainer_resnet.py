@@ -281,85 +281,86 @@ with tf.device(device):
         max1 = maxpool_relu_layer(conv_init)
         conv64_1 = conv_relu_layer(input=max1, n_input=64, n_filters=64,
                                 filter_size=3, stride = 1)
-        conv64_2 = conv_relu_layer(input=conv64_1, n_input=64, n_filters=64,
+        conv64_2 = conv_pool_layer(input=conv64_1, n_input=64, n_filters=64,
                                 filter_size=3, stride = 1)
         res1 = residual_layer(max1,conv64_2)
         conv64_3 = conv_relu_layer(input=res1, n_input=64, n_filters=64,
                                    filter_size=3, stride=1)
-        conv64_4 = conv_relu_layer(input=conv64_3, n_input=64, n_filters=64,
+        conv64_4 = conv_pool_layer(input=conv64_3, n_input=64, n_filters=64,
                                    filter_size=3, stride=1)
         res2 = residual_layer(res1, conv64_4)
         conv64_5 = conv_relu_layer(input=res2, n_input=64, n_filters=64,
                                    filter_size=3, stride=1)
-        conv64_6 = conv_relu_layer(input=conv64_5, n_input=64, n_filters=64,
+        conv64_6 = conv_pool_layer(input=conv64_5, n_input=64, n_filters=64,
                                    filter_size=3, stride=1)
         res3 = residual_layer(res2, conv64_6)
         conv128_1 = conv_pool_layer(input=res3, n_input=64, n_filters=128,
                                     filter_size=3, stride=2)
-        conv128_2 = conv_relu_layer(input=conv128_1, n_input=128, n_filters=128,
+        conv128_2 = conv_pool_layer(input=conv128_1, n_input=128, n_filters=128,
                                     filter_size=3, stride=1)
         res4 = residual_layer_pad(res3,conv128_2,32,8)
         conv128_3 = conv_relu_layer(input=res4, n_input=128, n_filters=128,
                                     filter_size=3, stride=1)
-        conv128_4 = conv_relu_layer(input=conv128_3, n_input=128, n_filters=128,
+        conv128_4 = conv_pool_layer(input=conv128_3, n_input=128, n_filters=128,
                                     filter_size=3, stride=1)
         res5 = residual_layer(res4, conv128_4)
         conv128_5 = conv_relu_layer(input=res5, n_input=128, n_filters=128,
                                     filter_size=3, stride=1)
-        conv128_6 = conv_relu_layer(input=conv128_5, n_input=128, n_filters=128,
+        conv128_6 = conv_pool_layer(input=conv128_5, n_input=128, n_filters=128,
                                     filter_size=3, stride=1)
         res6 = residual_layer(res5, conv128_6)
         conv128_7 = conv_relu_layer(input=res6, n_input=128, n_filters=128,
                                     filter_size=3, stride=1)
-        conv128_8 = conv_relu_layer(input=conv128_7, n_input=128, n_filters=128,
+        conv128_8 = conv_pool_layer(input=conv128_7, n_input=128, n_filters=128,
                                     filter_size=3, stride=1)
         res7 = residual_layer(res6, conv128_8)
         conv256_1 = conv_pool_layer(input=res7, n_input=128, n_filters=256,
                                     filter_size=3, stride=2)
-        conv256_2 = conv_relu_layer(input=conv256_1, n_input=256, n_filters=256,
+        conv256_2 = conv_pool_layer(input=conv256_1, n_input=256, n_filters=256,
                                     filter_size=3, stride=1)
         res8 = residual_layer_pad(res4, conv256_2, 64, 8)
         conv256_3 = conv_relu_layer(input=res8, n_input=256, n_filters=256,
                                     filter_size=3, stride=1)
-        conv256_4 = conv_relu_layer(input=conv256_3, n_input=256, n_filters=256,
+        conv256_4 = conv_pool_layer(input=conv256_3, n_input=256, n_filters=256,
                                     filter_size=3, stride=1)
         res9 = residual_layer(res8, conv256_4)
         conv256_5 = conv_relu_layer(input=res9, n_input=256, n_filters=256,
                                     filter_size=3, stride=1)
-        conv256_6 = conv_relu_layer(input=conv256_5, n_input=256, n_filters=256,
+        conv256_6 = conv_pool_layer(input=conv256_5, n_input=256, n_filters=256,
                                     filter_size=3, stride=1)
         res10 = residual_layer(res9, conv256_6)
         conv256_7 = conv_relu_layer(input=res10, n_input=256, n_filters=256,
                                     filter_size=3, stride=1)
-        conv256_8 = conv_relu_layer(input=conv256_7, n_input=256, n_filters=256,
+        conv256_8 = conv_pool_layer(input=conv256_7, n_input=256, n_filters=256,
                                     filter_size=3, stride=1)
         res11 = residual_layer(res10, conv256_8)
         conv256_9 = conv_relu_layer(input=res11, n_input=256, n_filters=256,
                                     filter_size=3, stride=1)
-        conv256_10 = conv_relu_layer(input=conv256_9, n_input=256, n_filters=256,
+        conv256_10 = conv_pool_layer(input=conv256_9, n_input=256, n_filters=256,
                                     filter_size=3, stride=1)
         res12 = residual_layer(res11, conv256_10)
         conv256_11 = conv_relu_layer(input=res12, n_input=256, n_filters=256,
                                     filter_size=3, stride=1)
-        conv256_12 = conv_relu_layer(input=conv256_11, n_input=256, n_filters=256,
+        conv256_12 = conv_pool_layer(input=conv256_11, n_input=256, n_filters=256,
                                      filter_size=3, stride=1)
         res13 = residual_layer(res12, conv256_12)
         conv512_1 = conv_pool_layer(input=res12, n_input=256, n_filters=512,
                                      filter_size=3, stride=2)
-        conv512_2 = conv_relu_layer(input=conv512_1, n_input=512, n_filters=512,
+        conv512_2 = conv_pool_layer(input=conv512_1, n_input=512, n_filters=512,
                                      filter_size=3, stride=1)
         res14 = residual_layer_pad(res13, conv512_2, 128, 8)
         conv512_3 = conv_relu_layer(input=res14, n_input=512, n_filters=512,
                                     filter_size=3, stride=1)
-        conv512_4 = conv_relu_layer(input=conv512_3, n_input=512, n_filters=512,
+        conv512_4 = conv_pool_layer(input=conv512_3, n_input=512, n_filters=512,
                                     filter_size=3, stride=1)
         res15 = residual_layer(res14, conv512_4)
         conv512_5 = conv_relu_layer(input=res15, n_input=512, n_filters=512,
                                     filter_size=3, stride=1)
-        conv512_6 = conv_relu_layer(input=conv512_5, n_input=512, n_filters=512,
+        conv512_6 = conv_pool_layer(input=conv512_5, n_input=512, n_filters=512,
                                     filter_size=3, stride=1)
         res16 = residual_layer(res15, conv512_6)
-        avg_pool = tf.nn.pool(res16, window_shape=[2,2], pooling_type='AVG', padding='SAME')
+        #avg_pool = tf.nn.pool(res16, window_shape=[2,2], pooling_type='AVG', padding='SAME')
+        avg_pool = tf.reduce_mean(res16, axis=[1,2])
         flat = flat_layer(avg_pool)
         fc1 = fc_layer(input=flat, n_inputs=flat.get_shape()[1:4].num_elements(), n_outputs=n_classes)
         #fc1 = fc_layer(input=max5, n_inputs=filter_size_conv13, n_outputs=fc1_layer_size)
