@@ -134,7 +134,7 @@ import tensorflow as tf
 ####### MODIFIABLE PARAMETERS ######
 
 task = "Sex"  # Options are "Sex", "Age", "Expression"
-#network = "vggE1" # Options are "vggC", "vggD", "vggE", "vggE1"
+network = "resnet" # Options are "vggC", "vggD", "vggE", "vggE1"
 device = '/cpu:0' # '/cpu:0' or '/gpu:0'
 
 batch_size = 16
