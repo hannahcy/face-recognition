@@ -220,7 +220,7 @@ def fc_layer(input, n_inputs, n_outputs, use_relu=True):
     return fc_layer
 
 def residual_layer(input1, input2):
-    return tf.add(input1,input2)
+    return tf.nn.relu(tf.add(input1,input2))
 
 def residual_layer_pad(input_small, input_big, pad_small, pad_big):
     rank = tf.rank(input_small)
@@ -228,7 +228,7 @@ def residual_layer_pad(input_small, input_big, pad_small, pad_big):
     padded_input_small = tf.pad(input_small, paddings, "CONSTANT")
     paddings = tf.convert_to_tensor([[0, 0], [pad_big, pad_big], [pad_big, pad_big], [0, 0]])
     padded_input_big = tf.pad(input_big, paddings, "CONSTANT")
-    return tf.add(padded_input_small,padded_input_big)
+    return tf.nn.relu(tf.add(padded_input_small,padded_input_big))
 
 # print("after layer defns, before model defined")
 
