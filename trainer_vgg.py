@@ -134,11 +134,11 @@ import tensorflow as tf
 ####### MODIFIABLE PARAMETERS ######
 
 task = "Sex"  # Options are "Sex", "Age", "Expression"
-network = "vggE" # Options are "vggC", "vggD", "vggE", "vggE1"
+network = "vggD" # Options are "vggC", "vggD", "vggE", "vggE1"
 device = '/gpu:0' # '/cpu:0' or '/gpu:0'
 
 batch_size = 16
-n_epochs = 1000
+n_epochs = 200
 learning_rate = 0.0001
 
 n_filters_conv1 = 64
