@@ -129,12 +129,65 @@ for line in open("MITFaces/faceDS"):
 print("Data loaded")
 sys.stdout.flush()
 
+import random
+from scipy import ndarray
+import skimage as sk
+from skimage import transform
+from skimage import util
+import copy
+
+def random_rotation(image_array):
+    # pick a random degree of rotation between 25% on the left and 25% on the right
+    random_degree = random.uniform(-25, 25)
+    return sk.transform.rotate(image_array, random_degree)
+
+def random_noise(image_array):
+    # add random noise to the image
+    return sk.util.random_noise(image_array)
+
+def horizontal_flip(image_array):
+    # horizontal flip doesn't need skimage, it's easy as flipping the image array of pixels !
+    return image_array[:, ::-1]
+
+new_faces = np.zeros([trainingFaces.shape[0]*4, dimensions])
+new_trainingSexLabels = np.zeros(trainingFaces.shape[0]*4)  # Sex - 0 = male; 1 = female
+new_trainingAgeLabels = np.zeros(trainingFaces.shape[0]*4)  # Age - 0 = child; 1 = teen; 2 = male
+new_trainingExpLabels = np.zeros(trainingFaces.shape[0]*4)  # Expression - 0 = serious; 1 = smiling
+
+for i in range(trainingFaces.shape[0]):
+    new_index = i*4
+    new_faces[new_index, :] = copy.deepcopy(trainingFaces[i])
+    reshaped = np.reshape(trainingFaces[i], [128,128])
+    #print(reshaped.shape)
+    rotated = random_rotation(reshaped)
+    new_faces[(new_index+1),:] = np.reshape(rotated,[128*128])
+    new_faces[(new_index+2),:] = random_noise(trainingFaces[i,:])
+    flipped = horizontal_flip(reshaped)
+    new_faces[(new_index+3),:] = np.reshape(flipped,[128*128])
+    new_trainingSexLabels[new_index] = trainingSexLabels[i]
+    new_trainingAgeLabels[new_index] = trainingAgeLabels[i]
+    new_trainingExpLabels[new_index] = trainingExpLabels[i]
+    new_trainingSexLabels[new_index+1] = trainingSexLabels[i]
+    new_trainingAgeLabels[new_index+1] = trainingAgeLabels[i]
+    new_trainingExpLabels[new_index+1] = trainingExpLabels[i]
+    new_trainingSexLabels[new_index+2] = trainingSexLabels[i]
+    new_trainingAgeLabels[new_index+2] = trainingAgeLabels[i]
+    new_trainingExpLabels[new_index+2] = trainingExpLabels[i]
+    new_trainingSexLabels[new_index+3] = trainingSexLabels[i]
+    new_trainingAgeLabels[new_index+3] = trainingAgeLabels[i]
+    new_trainingExpLabels[new_index+3] = trainingExpLabels[i]
+
+trainingFaces = copy.deepcopy(new_faces)
+trainingSexLabels = copy.deepcopy(new_trainingSexLabels)
+trainingAgeLabels = copy.deepcopy(new_trainingAgeLabels)
+trainingExpLabels = copy.deepcopy(new_trainingExpLabels)
+
 import tensorflow as tf
 
 ####### MODIFIABLE PARAMETERS ######
 
 task = "Sex"  # Options are "Sex", "Age", "Expression"
-network = "vggE1" # Options are "vggC", "vggD", "vggE", "vggE1"
+network = "vggD" # Options are "vggC", "vggD", "vggE", "vggE1"
 device = '/gpu:0' # '/cpu:0' or '/gpu:0'
 
 batch_size = 16
