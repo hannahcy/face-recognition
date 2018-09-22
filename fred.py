@@ -129,10 +129,10 @@ for line in open("MITFaces/faceDS"):
 print("Data loaded")
 sys.stdout.flush()
 
-num_child = (testingAgeLabels == 0).sum()
-num_teen = (testingAgeLabels == 1).sum()
-num_adult = (testingAgeLabels == 2).sum()
-num_senior = (testingAgeLabels == 3).sum()
-total = testingAgeLabels.shape
+num_child = (validationExpLabels == 0).sum()
+num_teen = (validationExpLabels == 1).sum()
+#num_adult = (validationAgeLabels == 2).sum()
+#num_senior = (validationAgeLabels == 3).sum()
+total = validationExpLabels.shape
 
-print(num_child, num_child/total, num_teen, num_teen/total, num_adult, num_adult/total, num_senior, num_senior/total)
+print(num_child, num_child/total, num_teen, num_teen/total) #, num_adult, num_adult/total, num_senior, num_senior/total)

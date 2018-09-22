@@ -133,7 +133,7 @@ import tensorflow as tf
 
 ####### MODIFIABLE PARAMETERS ######
 
-task = "Age"  # Options are "Sex", "Age", "Expression"
+task = "Sex"  # Options are "Sex", "Age", "Expression"
 network = "vggE1" # Options are "vggC", "vggD", "vggE", "vggE1"
 device = '/gpu:0' # '/cpu:0' or '/gpu:0'
 
