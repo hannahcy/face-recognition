@@ -405,7 +405,7 @@ with tf.device(device):
         # do some work with the model.
         with tf.Session() as sess:
             # Restore variables from disk.
-            saver.restore(sess, "models/aug-sex-model_vggD_46")
+            saver.restore(sess, "models/aug-sex-model_vggD_70")
             print("Model restored.")
             test_acc = 0
             for test in range(test_batches):
