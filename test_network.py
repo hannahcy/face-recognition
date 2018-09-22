@@ -134,7 +134,7 @@ import tensorflow as tf
 ####### MODIFIABLE PARAMETERS ######
 
 task = "Expression"  # Options are "Sex", "Age", "Expression"
-network = "vggC" # Options are "vggC", "vggD", "vggE", "vggE1"
+network = "vggD" # Options are "vggC", "vggD", "vggE", "vggE1"
 device = '/cpu:0' # '/cpu:0' or '/gpu:0'
 
 batch_size = 16
@@ -405,7 +405,7 @@ with tf.device(device):
         # do some work with the model.
         with tf.Session() as sess:
             # Restore variables from disk.
-            saver.restore(sess, "models/exp-model_vggC_82")
+            saver.restore(sess, "models/exp-model_vggD_132")
             print("Model restored.")
             test_acc = 0
             for test in range(test_batches):
