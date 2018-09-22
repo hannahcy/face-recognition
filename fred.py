@@ -149,33 +149,34 @@ def horizontal_flip(image_array):
     # horizontal flip doesn't need skimage, it's easy as flipping the image array of pixels !
     return image_array[:, ::-1]
 
-new_faces = np.zeros([trainingFaces.shape[0]*4, dimensions])
-new_trainingSexLabels = np.zeros(trainingFaces.shape[0]*4)  # Sex - 0 = male; 1 = female
-new_trainingAgeLabels = np.zeros(trainingFaces.shape[0]*4)  # Age - 0 = child; 1 = teen; 2 = male
-new_trainingExpLabels = np.zeros(trainingFaces.shape[0]*4)  # Expression - 0 = serious; 1 = smiling
+new_faces = np.zeros([trainingFaces.shape[0]*10, dimensions])
+new_trainingSexLabels = np.zeros(trainingFaces.shape[0]*10)  # Sex - 0 = male; 1 = female
+new_trainingAgeLabels = np.zeros(trainingFaces.shape[0]*10)  # Age - 0 = child; 1 = teen; 2 = male
+new_trainingExpLabels = np.zeros(trainingFaces.shape[0]*10)  # Expression - 0 = serious; 1 = smiling
 
 for i in range(trainingFaces.shape[0]):
-    new_index = i*4
+    new_index = i*10
     new_faces[new_index, :] = copy.deepcopy(trainingFaces[i])
     reshaped = np.reshape(trainingFaces[i], [128,128])
     #print(reshaped.shape)
     rotated = random_rotation(reshaped)
-    new_faces[(new_index+1),:] = np.reshape(rotated,[128*128])
-    new_faces[(new_index+2),:] = random_noise(trainingFaces[i,:])
+    new_faces[(new_index + 1),:] = np.reshape(rotated,[128*128])
+    rotated = random_rotation(reshaped)
+    new_faces[(new_index + 2), :] = np.reshape(rotated, [128 * 128])
+    rotated = random_rotation(reshaped)
+    new_faces[(new_index + 3), :] = np.reshape(rotated, [128 * 128])
+    rotated = random_rotation(reshaped)
+    new_faces[(new_index + 4), :] = np.reshape(rotated, [128 * 128])
+    new_faces[(new_index + 5),:] = random_noise(trainingFaces[i,:])
+    new_faces[(new_index + 6), :] = random_noise(trainingFaces[i, :])
+    new_faces[(new_index + 7), :] = random_noise(trainingFaces[i, :])
+    new_faces[(new_index + 8), :] = random_noise(trainingFaces[i, :])
     flipped = horizontal_flip(reshaped)
-    new_faces[(new_index+3),:] = np.reshape(flipped,[128*128])
-    new_trainingSexLabels[new_index] = trainingSexLabels[i]
-    new_trainingAgeLabels[new_index] = trainingAgeLabels[i]
-    new_trainingExpLabels[new_index] = trainingExpLabels[i]
-    new_trainingSexLabels[new_index+1] = trainingSexLabels[i]
-    new_trainingAgeLabels[new_index+1] = trainingAgeLabels[i]
-    new_trainingExpLabels[new_index+1] = trainingExpLabels[i]
-    new_trainingSexLabels[new_index+2] = trainingSexLabels[i]
-    new_trainingAgeLabels[new_index+2] = trainingAgeLabels[i]
-    new_trainingExpLabels[new_index+2] = trainingExpLabels[i]
-    new_trainingSexLabels[new_index+3] = trainingSexLabels[i]
-    new_trainingAgeLabels[new_index+3] = trainingAgeLabels[i]
-    new_trainingExpLabels[new_index+3] = trainingExpLabels[i]
+    new_faces[(new_index + 9),:] = np.reshape(flipped,[128*128])
+    for j in range(new_index, new_index+10):
+        new_trainingSexLabels[j] = trainingSexLabels[i]
+        new_trainingAgeLabels[j] = trainingAgeLabels[i]
+        new_trainingExpLabels[j] = trainingExpLabels[i]
 
 trainingFaces = copy.deepcopy(new_faces)
 trainingSexLabels = copy.deepcopy(new_trainingSexLabels)
