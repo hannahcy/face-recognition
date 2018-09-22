@@ -133,8 +133,8 @@ import tensorflow as tf
 
 ####### MODIFIABLE PARAMETERS ######
 
-task = "Sex"  # Options are "Sex", "Age", "Expression"
-network = "vggD" # Options are "vggC", "vggD", "vggE", "vggE1"
+task = "Expression"  # Options are "Sex", "Age", "Expression"
+network = "vggC" # Options are "vggC", "vggD", "vggE", "vggE1"
 device = '/gpu:0' # '/cpu:0' or '/gpu:0'
 
 batch_size = 16
@@ -302,7 +302,7 @@ if task == "Sex":
     train_data = Dataset(trainingFaces, train_labels)
     valid_data = Dataset(validationFaces, valid_labels)
     test_data = Dataset(testingFaces, test_labels)
-    model = "models/fixed-sex-model"
+    model = "models/sex-model"
 elif task == "Age":
     n_classes = 4
     train_labels = make_one_hot(trainingAgeLabels)
@@ -311,7 +311,7 @@ elif task == "Age":
     train_data = Dataset(trainingFaces, train_labels)
     valid_data = Dataset(validationFaces, valid_labels)
     test_data = Dataset(testingFaces, test_labels)
-    model = "models/fixed-age-model"
+    model = "models/age-model"
 elif task == "Expression":
     n_classes = 2
     train_labels = make_one_hot(trainingExpLabels)
@@ -320,7 +320,7 @@ elif task == "Expression":
     train_data = Dataset(trainingFaces, train_labels)
     valid_data = Dataset(validationFaces, valid_labels)
     test_data = Dataset(testingFaces, test_labels)
-    model = "models/fixed-exp-model"
+    model = "models/exp-model"
 else:
     print("Please set task to one of the three options")
     sys.stdout.flush()
@@ -391,7 +391,7 @@ with tf.device(device):
         fc3 = fc_layer(input=fc2, n_inputs=fc2_layer_size, n_outputs=n_classes, use_relu=False)  # n_outputs=n_classes
         y_pred = tf.nn.softmax(fc3, name="y_pred")
         y_pred_class = tf.argmax(y_pred, dimension=1)
-        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=y_pred, labels=y_true) # changed fc3 to y_pred
+        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=fc3, labels=y_true) # changed fc3 to y_pred
         cost = tf.reduce_mean(cross_entropy)
         optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
         correct_prediction = tf.equal(y_pred_class, y_true_class)
