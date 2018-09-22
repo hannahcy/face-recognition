@@ -134,7 +134,7 @@ import tensorflow as tf
 ####### MODIFIABLE PARAMETERS ######
 
 task = "Age"  # Options are "Sex", "Age", "Expression"
-network = "vggC" # Options are "vggC", "vggD", "vggE", "vggE1"
+network = "vggE" # Options are "vggC", "vggD", "vggE", "vggE1"
 device = '/cpu:0' # '/cpu:0' or '/gpu:0'
 
 batch_size = 16
@@ -405,7 +405,7 @@ with tf.device(device):
         # do some work with the model.
         with tf.Session() as sess:
             # Restore variables from disk.
-            saver.restore(sess, "models/age-model_vggC_40")
+            saver.restore(sess, "models/age-model_vggE_110")
             print("Model restored.")
             test_acc = 0
             for test in range(test_batches):
@@ -425,5 +425,5 @@ def computeLabels(faceData):
     estExpLabels = np.zeros(n)
     return estSexLabels, estAgeLabels, estExpLabels
 
-estS, estA, estE = computeLabels(testingFaces)
+#estS, estA, estE = computeLabels(testingFaces)
 # I'll do stuff with the above to evaluate the accuracy of your methods
