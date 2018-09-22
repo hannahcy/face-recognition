@@ -355,7 +355,7 @@ if task == "Sex":
     train_data = Dataset(trainingFaces, train_labels)
     valid_data = Dataset(validationFaces, valid_labels)
     test_data = Dataset(testingFaces, test_labels)
-    model = "models/sex-model"
+    model = "models/aug-sex-model"
 elif task == "Age":
     n_classes = 4
     train_labels = make_one_hot(trainingAgeLabels)
@@ -364,7 +364,7 @@ elif task == "Age":
     train_data = Dataset(trainingFaces, train_labels)
     valid_data = Dataset(validationFaces, valid_labels)
     test_data = Dataset(testingFaces, test_labels)
-    model = "models/age-model"
+    model = "models/aug-age-model"
 elif task == "Expression":
     n_classes = 2
     train_labels = make_one_hot(trainingExpLabels)
@@ -373,7 +373,7 @@ elif task == "Expression":
     train_data = Dataset(trainingFaces, train_labels)
     valid_data = Dataset(validationFaces, valid_labels)
     test_data = Dataset(testingFaces, test_labels)
-    model = "models/exp-model"
+    model = "aug-models/exp-model"
 else:
     print("Please set task to one of the three options")
     sys.stdout.flush()
