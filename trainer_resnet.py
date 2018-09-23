@@ -363,9 +363,6 @@ with tf.device(device):
         avg_pool = tf.reduce_mean(res16, axis=[1,2])
         flat = flat_layer(avg_pool)
         fc1 = fc_layer(input=flat, n_inputs=flat.get_shape()[1:4].num_elements(), n_outputs=n_classes)
-        #fc1 = fc_layer(input=max5, n_inputs=filter_size_conv13, n_outputs=fc1_layer_size)
-        #fc2 = fc_layer(input=fc1, n_inputs=fc1_layer_size, n_outputs=fc2_layer_size)
-        #fc3 = fc_layer(input=fc2, n_inputs=fc2_layer_size, n_outputs=n_classes, use_relu=False)  # n_outputs=n_classes
         y_pred = tf.nn.softmax(fc1, name="y_pred")
         y_pred_class = tf.argmax(y_pred, dimension=1)
         cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=fc1, labels=y_true)
@@ -379,10 +376,7 @@ with tf.device(device):
 
         # session run with one kind of label
         with tf.Session() as sess:
-            # print("inside session")
-            # Run the initializer
             sess.run(tf.global_variables_initializer())
-            # print("Initialised")
             val_acc = 0
             val_loss = 0
             for val in range(val_batches):
@@ -426,10 +420,4 @@ with tf.device(device):
                 if i % saver_step == 0 or val_acc > 0.85:
                     save_path = saver.save(sess, model+"_"+network+"_"+str(i))
 
-print("Done!")
-# print(numTraining)
-# print(numValidation)
-# print(numTesting)
-# print(trainingFaces.shape)
-# print(validationFaces.shape)
-# print(testingFaces.shape)
+print("Training done!")
