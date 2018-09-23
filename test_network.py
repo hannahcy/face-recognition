@@ -133,7 +133,7 @@ import tensorflow as tf
 
 ####### MODIFIABLE PARAMETERS ######
 
-task = "Sex"  # Options are "Sex", "Age", "Expression"
+task = "Expression"  # Options are "Sex", "Age", "Expression"
 network = "vggD" # Options are "vggC", "vggD", "vggE", "vggE1"
 device = '/cpu:0' # '/cpu:0' or '/gpu:0'
 
@@ -405,7 +405,7 @@ with tf.device(device):
         # do some work with the model.
         with tf.Session() as sess:
             # Restore variables from disk.
-            saver.restore(sess, "models/aug-sex-model_vggD_70")
+            saver.restore(sess, "models/aug10-exp-model_vggD_140")
             print("Model restored.")
             test_acc = 0
             for test in range(test_batches):
