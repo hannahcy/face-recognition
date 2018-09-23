@@ -193,7 +193,7 @@ device = '/gpu:0' # '/cpu:0' or '/gpu:0'
 
 batch_size = 16
 n_epochs = 500
-learning_rate = 0.0001
+learning_rate = 0.1
 
 n_filters_conv1 = 64
 filter_size_conv1 = 3
@@ -445,7 +445,7 @@ with tf.device(device):
         fc3 = fc_layer(input=fc2, n_inputs=fc2_layer_size, n_outputs=n_classes, use_relu=False)  # n_outputs=n_classes
         y_pred = tf.nn.softmax(fc3, name="y_pred")
         y_pred_class = tf.argmax(y_pred, dimension=1)
-        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=y_pred, labels=y_true) # changed fc3 to y_pred
+        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=fc3, labels=y_true) # changed fc3 to y_pred
         cost = tf.reduce_mean(cross_entropy)
         optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
         correct_prediction = tf.equal(y_pred_class, y_true_class)
