@@ -470,9 +470,9 @@ with tf.device(device):
             val_loss = 0
             for val in range(val_batches):
                 x_valid_batch, y_valid_batch = valid_data.next_batch(batch_size)
-                feed_dict_val = {X: x_valid_batch, y_true: y_valid_batch}
-                val_acc += sess.run(accuracy, feed_dict=feed_dict_val, keep_prob=1.0)
-                val_loss += sess.run(cost, feed_dict=feed_dict_val, keep_prob=1.0)
+                feed_dict_val = {X: x_valid_batch, y_true: y_valid_batch, keep_prob: 1.0}
+                val_acc += sess.run(accuracy, feed_dict=feed_dict_val)
+                val_loss += sess.run(cost, feed_dict=feed_dict_val)
             val_acc = val_acc / val_batches
             val_loss = val_loss / val_batches
             msg = "Pre-training (Epoch {0}) --- Training Accuracy: {1:>6.2%}, Validation Accuracy: {2:>6.2%},  Validation Loss: {3:.3f}"
@@ -490,16 +490,16 @@ with tf.device(device):
                     # if batch % 10 == 0:
                     #    print('Batch', batch, 'of', n_batches, 'done')
                     x_batch, y_true_batch = train_data.next_batch(batch_size)
-                    feed_dict_train = {X: x_batch, y_true: y_true_batch}
-                    sess.run(optimizer, feed_dict=feed_dict_train, keep_prob=0.1)
-                    acc += sess.run(accuracy, feed_dict=feed_dict_train, keep_prob=0.1)
+                    feed_dict_train = {X: x_batch, y_true: y_true_batch, keep_prob: 0.1}
+                    sess.run(optimizer, feed_dict=feed_dict_train)
+                    acc += sess.run(accuracy, feed_dict=feed_dict_train)
                 if i % display_step == 0:
                     valid_data.batch_index = 0
                     for j in range(val_batches):
                         x_valid_batch, y_valid_batch = valid_data.next_batch(batch_size)
-                        feed_dict_val = {X: x_valid_batch, y_true: y_valid_batch}
-                        val_acc += sess.run(accuracy, feed_dict=feed_dict_val, keep_prob=1.0)
-                        val_loss += sess.run(cost, feed_dict=feed_dict_val, keep_prob=1.0)
+                        feed_dict_val = {X: x_valid_batch, y_true: y_valid_batch, keep_prob: 1.0}
+                        val_acc += sess.run(accuracy, feed_dict=feed_dict_val)
+                        val_loss += sess.run(cost, feed_dict=feed_dict_val)
                 acc = acc / n_batches
                 val_acc = val_acc / val_batches
                 val_loss = val_loss / val_batches
