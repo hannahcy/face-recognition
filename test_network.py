@@ -345,14 +345,14 @@ with tf.device(device):
         conv2 = conv_relu_layer(input=conv1, n_input=n_filters_conv1, n_filters=n_filters_conv2,
                                 filter_size=filter_size_conv2, stride=stride2)
         max1 = maxpool_relu_layer(conv2)
-        drop1 = tf.nn.dropout(max1, keep_prob)
-        conv3 = conv_relu_layer(input=drop1, n_input=n_filters_conv2, n_filters=n_filters_conv3,
+        #drop1 = tf.nn.dropout(max1, keep_prob)
+        conv3 = conv_relu_layer(input=max1, n_input=n_filters_conv2, n_filters=n_filters_conv3,
                                 filter_size=filter_size_conv3, stride=stride3)
         conv4 = conv_relu_layer(input=conv3, n_input=n_filters_conv3, n_filters=n_filters_conv4,
                                 filter_size=filter_size_conv4, stride=stride4)
         max2 = maxpool_relu_layer(conv4)
-        drop2 = tf.nn.dropout(max2, keep_prob)
-        conv5 = conv_relu_layer(input=drop2, n_input=n_filters_conv4, n_filters=n_filters_conv5,
+        #drop2 = tf.nn.dropout(max2, keep_prob)
+        conv5 = conv_relu_layer(input=max2, n_input=n_filters_conv4, n_filters=n_filters_conv5,
                                 filter_size=filter_size_conv5, stride=stride5)
         conv6 = conv_relu_layer(input=conv5, n_input=n_filters_conv5, n_filters=n_filters_conv6,
                                 filter_size=filter_size_conv6, stride=stride6)
@@ -364,8 +364,8 @@ with tf.device(device):
             max3 = maxpool_relu_layer(conv75)
         else:
             max3 = maxpool_relu_layer(conv7)
-        drop3 = tf.nn.dropout(max3, keep_prob)
-        conv8 = conv_relu_layer(input=drop3, n_input=n_filters_conv7, n_filters=n_filters_conv8,
+        #drop3 = tf.nn.dropout(max3, keep_prob)
+        conv8 = conv_relu_layer(input=max3, n_input=n_filters_conv7, n_filters=n_filters_conv8,
                                 filter_size=filter_size_conv8, stride=stride8)
         conv9 = conv_relu_layer(input=conv8, n_input=n_filters_conv8, n_filters=n_filters_conv9,
                                 filter_size=filter_size_conv9, stride=stride9)
@@ -377,8 +377,8 @@ with tf.device(device):
             max4 = maxpool_relu_layer(conv105)
         else:
             max4 = maxpool_relu_layer(conv10)
-        drop4 = tf.nn.dropout(max4, keep_prob)
-        conv11 = conv_relu_layer(input=drop4, n_input=n_filters_conv10, n_filters=n_filters_conv11,
+        #drop4 = tf.nn.dropout(max4, keep_prob)
+        conv11 = conv_relu_layer(input=max4, n_input=n_filters_conv10, n_filters=n_filters_conv11,
                                  filter_size=filter_size_conv11, stride=stride11)
         conv12 = conv_relu_layer(input=conv11, n_input=n_filters_conv11, n_filters=n_filters_conv12,
                                  filter_size=filter_size_conv12, stride=stride12)
@@ -390,8 +390,8 @@ with tf.device(device):
             max5 = maxpool_relu_layer(conv135)
         else:
             max5 = maxpool_relu_layer(conv13)
-        drop5 = tf.nn.dropout(max5, keep_prob)
-        flat = flat_layer(drop5)
+        #drop5 = tf.nn.dropout(max5, keep_prob)
+        flat = flat_layer(max5)
         fc1 = fc_layer(input=flat, n_inputs=flat.get_shape()[1:4].num_elements(), n_outputs=fc1_layer_size)
         #fc1 = fc_layer(input=max5, n_inputs=filter_size_conv13, n_outputs=fc1_layer_size)
         fc2 = fc_layer(input=fc1, n_inputs=fc1_layer_size, n_outputs=fc2_layer_size)
@@ -411,12 +411,12 @@ with tf.device(device):
         # do some work with the model.
         with tf.Session() as sess:
             # Restore variables from disk.
-            saver.restore(sess, "dropout/aug10-sex-model_vggD_21")
+            saver.restore(sess, "best_sex-model_vggD")
             print("Model restored.")
             test_acc = 0
             for test in range(test_batches):
                 x_test_batch, y_test_batch = test_data.next_batch(batch_size)
-                feed_dict_val = {X: x_test_batch, y_true: y_test_batch, keep_prob: 1.0}
+                feed_dict_val = {X: x_test_batch, y_true: y_test_batch} #, keep_prob: 1.0}
                 test_acc += sess.run(accuracy, feed_dict=feed_dict_val)
             test_acc = (test_acc / test_batches) * 100
             print("Test accuracy: "+"{0:.2f}".format(test_acc)+"%")  # , val_loss))
