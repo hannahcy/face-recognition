@@ -490,7 +490,7 @@ with tf.device(device):
                     # if batch % 10 == 0:
                     #    print('Batch', batch, 'of', n_batches, 'done')
                     x_batch, y_true_batch = train_data.next_batch(batch_size)
-                    feed_dict_train = {X: x_batch, y_true: y_true_batch, keep_prob: 0.5}
+                    feed_dict_train = {X: x_batch, y_true: y_true_batch, keep_prob: 0.75}
                     sess.run(optimizer, feed_dict=feed_dict_train)
                     acc += sess.run(accuracy, feed_dict=feed_dict_train)
                 if i % display_step == 0:
