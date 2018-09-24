@@ -129,9 +129,10 @@ for line in open("MITFaces/faceDS"):
 print("Data loaded")
 sys.stdout.flush()
 
-num_child = (trainingExpLabels == 0).sum() + (validationExpLabels == 0).sum() + (testingExpLabels == 0).sum()
-num_teen = (trainingExpLabels == 1).sum()+ (validationExpLabels == 1).sum() + (testingExpLabels == 1).sum()
-
-total = 1997 + 1000 + 1000
+num_child = (validationAgeLabels == 0).sum() #+ (validationExpLabels == 0).sum() + (testingExpLabels == 0).sum()
+num_teen = (validationAgeLabels == 1).sum()#+ (validationExpLabels == 1).sum() + (testingExpLabels == 1).sum()
+num_adult = (validationAgeLabels == 2).sum()
+num_senior = (validationAgeLabels == 3).sum()
+total = 1000 #+ 1000 + 1000
 print(total)
-print(num_child, (num_child/total)*100, num_teen, (num_teen/total)*100) #, num_adult, (num_adult/total)*100, num_senior, (num_senior/total)*100)
+print(num_child, (num_child/total)*100, num_teen, (num_teen/total)*100, num_adult, (num_adult/total)*100, num_senior, (num_senior/total)*100)
