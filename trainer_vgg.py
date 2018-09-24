@@ -492,7 +492,7 @@ with tf.device(device):
                     x_batch, y_true_batch = train_data.next_batch(batch_size)
                     feed_dict_train = {X: x_batch, y_true: y_true_batch}
                     sess.run(optimizer, feed_dict=feed_dict_train)
-                    acc += sess.run(accuracy, feed_dict=feed_dict_train)
+                    acc += sess.run(accuracy, feed_dict=feed_dict_train, keep_prob=0.1)
                 if i % display_step == 0:
                     valid_data.batch_index = 0
                     for j in range(val_batches):
